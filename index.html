@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Support Coach — Live Console</title>
+<link rel="stylesheet" href="styles.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">SC</div>
+      <div>
+        <div class="brand-title">Support Coach</div>
+        <div class="brand-sub" id="viewLabel">LIVE CONSOLE</div>
+      </div>
+    </div>
+
+    <div class="topbar-meta">
+      <span class="pill" id="statusPill"><span class="dot"></span>live</span>
+      <span class="pill">Model <b>gemini-3.5-flash</b></span>
+      <span class="pill">Latency <b id="latencyOut">–</b></span>
+      <span class="pill">Case <b id="caseIdOut">SC-1040</b></span>
+      <span class="pill">Calls <b id="callsOut">1</b></span>
+    </div>
+
+    <div class="topbar-actions">
+      <button class="tab-btn active" data-view="console">Console</button>
+      <button class="tab-btn" data-view="dashboard">Dashboard</button>
+      <button class="btn" id="loadDemoBtn">Load demo</button>
+      <button class="btn" id="newCaseBtn">New case</button>
+      <button class="btn btn-danger" id="resolveBtn">Resolve</button>
+    </div>
+  </header>
+
+  <!-- CONSOLE VIEW -->
+  <main class="view" id="view-console">
+    <section class="panel conversation-panel">
+      <div class="panel-label">Conversation</div>
+      <div class="conversation-scroll" id="conversationScroll"></div>
+
+      <div class="common-issues">
+        <div class="panel-label">Common issues — click to fill</div>
+        <div class="chip-row" id="commonIssues"></div>
+      </div>
+
+      <div class="composer">
+        <div class="composer-row">
+          <div class="segmented" id="speakerToggle">
+            <button class="seg-btn active" data-speaker="customer">Customer</button>
+            <button class="seg-btn" data-speaker="agent">Agent</button>
+          </div>
+          <span class="composer-hint" id="composerHint">analyses, looks up and drafts a reply</span>
+          <label class="allow-actions"><input type="checkbox" id="allowActions" /> allow actions</label>
+          <span class="lang-pill">EN</span>
+        </div>
+        <div class="composer-input-row">
+          <input type="text" id="turnInput" placeholder="Type what the customer just said…" />
+          <button class="btn btn-primary" id="sendBtn">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel intel-panel">
+      <div class="panel-label">Live intelligence</div>
+      <div class="intel-scroll" id="intelScroll"></div>
+    </section>
+  </main>
+
+  <!-- DASHBOARD VIEW -->
+  <main class="view hidden" id="view-dashboard">
+    <section class="dash-column">
+      <div class="panel">
+        <div class="search-row">
+          <input type="text" id="caseSearch" placeholder="Search case ID, key issue, or anything said…" />
+          <button class="btn">Export CSV</button>
+          <button class="btn">JSON</button>
+        </div>
+        <div class="filter-row" id="filterRow"></div>
+        <div class="table-wrap">
+          <table class="case-table" id="caseTable">
+            <thead>
+              <tr>
+                <th>Case</th><th>Issue</th><th>Risk</th><th>Sentiment</th>
+                <th>Turns</th><th>SLA</th><th>Status</th><th>Opened</th>
+              </tr>
+            </thead>
+            <tbody id="caseTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-label">Resolution progress <span class="muted" id="resolvedPct"></span></div>
+          <div id="resolutionBars"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-label">Customer sentiment</div>
+          <div id="sentimentBars"></div>
+          <div class="stat-row">
+            <div><div class="stat-label">Avg turns</div><div class="stat-val" id="avgTurns">–</div></div>
+            <div><div class="stat-label">API calls</div><div class="stat-val" id="apiCalls">–</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">Cases opened per day</div>
+        <canvas id="issuesChart" height="90"></canvas>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-label">Agent performance — scores over time</div>
+          <div id="scoreCards" class="score-cards"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-label">What the coach keeps saying</div>
+          <div id="coachTips"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-label">Suggestion quality — acceptance rate</div>
+        <div class="accept-rate" id="acceptRate"></div>
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
